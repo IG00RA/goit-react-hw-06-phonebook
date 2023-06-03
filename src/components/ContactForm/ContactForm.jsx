@@ -1,9 +1,18 @@
-import { Formik, Field } from 'formik';
-import { Form } from './ContactForm.styled';
+import { Formik, Field, ErrorMessage } from 'formik';
+import * as Yup from 'yup';
+import { ErrorText, Form } from './ContactForm.styled';
 import { useDispatch, useSelector } from 'react-redux';
 import { addContact } from 'redux/contactsSlice';
 
 export const ContactForm = () => {
+  const validationSchema = Yup.object().shape({
+    name: Yup.string()
+      .matches(/^[A-Za-z]+$/, 'Name must contain only letters')
+      .required('Name is required'),
+    number: Yup.string()
+      .matches(/^[0-9]+$/, 'Number must contain only numbers')
+      .required('Number is required'),
+  });
   const dispatch = useDispatch();
   const contacts = useSelector(state => state.contacts.contactsState);
   return (
@@ -22,13 +31,13 @@ export const ContactForm = () => {
         dispatch(addContact(values));
         resetForm();
       }}
+      validationSchema={validationSchema}
     >
       <Form>
         <label htmlFor="name">Name</label>
         <Field
           type="text"
           name="name"
-          pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
           title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
           required
         />
@@ -36,10 +45,11 @@ export const ContactForm = () => {
         <Field
           type="tel"
           name="number"
-          pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
           title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
           required
         />
+        <ErrorMessage name="name" component={ErrorText} />
+        <ErrorMessage name="number" component={ErrorText} />
         <button type="submit">Add contact</button>
       </Form>
     </Formik>

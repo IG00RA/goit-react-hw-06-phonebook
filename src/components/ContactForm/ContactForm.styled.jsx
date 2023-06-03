@@ -12,3 +12,9 @@ export const Form = styled(FormikForm)`
 
   margin: 10px;
 `;
+
+export const ErrorText = styled.div`
+  color: red;
+  font-size: 14px;
+  margin-top: 5px;
+`;
