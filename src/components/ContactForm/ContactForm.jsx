@@ -1,9 +1,11 @@
-import PropTypes from 'prop-types';
 import { Formik, Field } from 'formik';
-import { nanoid } from 'nanoid';
 import { Form } from './ContactForm.styled';
+import { useDispatch, useSelector } from 'react-redux';
+import { addContact } from 'redux/contactsSlice';
 
-export const ContactForm = ({ onAdd, contacts }) => {
+export const ContactForm = () => {
+  const dispatch = useDispatch();
+  const contacts = useSelector(state => state.contacts.contactsState);
   return (
     <Formik
       initialValues={{
@@ -17,11 +19,7 @@ export const ContactForm = ({ onAdd, contacts }) => {
         ) {
           return alert(`${values.name} is already in contact list`);
         }
-        const newContact = {
-          ...values,
-          id: nanoid(),
-        };
-        onAdd(newContact);
+        dispatch(addContact(values));
         resetForm();
       }}
     >
@@ -46,9 +44,4 @@ export const ContactForm = ({ onAdd, contacts }) => {
       </Form>
     </Formik>
   );
-};
-
-ContactForm.propTypes = {
-  onAdd: PropTypes.func.isRequired,
-  contacts: PropTypes.array.isRequired,
 };
