@@ -1,6 +1,6 @@
 import { FormField } from './Filter.styled';
 import { useDispatch } from 'react-redux';
-import { getVisibleContacts } from 'redux/filterSlice';
+import { getUserInput } from 'redux/filterSlice';
 
 export const Filter = () => {
   const dispatch = useDispatch();
@@ -11,7 +11,7 @@ export const Filter = () => {
       <input
         type="text"
         onChange={e => {
-          dispatch(getVisibleContacts(e.currentTarget.value.toLowerCase()));
+          dispatch(getUserInput(e.currentTarget.value.toLowerCase()));
         }}
       />
     </FormField>
